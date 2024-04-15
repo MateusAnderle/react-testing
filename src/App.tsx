@@ -3,7 +3,6 @@ import { Application } from "./components/Application";
 import { Counter } from "./components/Counter";
 import { MuiMode } from "./components/MuiMode";
 import { Skills } from "./components/Skills";
-import { Users } from "./components/Users";
 import { AppProviders } from "./providers/app-providers";
 
 function App() {
@@ -14,7 +13,6 @@ function App() {
         <Application />
         <Skills skills={["HTML", "CSS", "JAVASCRIPT"]} />
         <Counter />
-        <Users />
       </div>
     </AppProviders>
   );
