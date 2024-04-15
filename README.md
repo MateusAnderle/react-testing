@@ -1,46 +1,137 @@
-# Getting Started with Create React App
+# What to test in react apps
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- Test component renders
+- Test component renders with props
+- Test component renders in different states (ex: navbar with login or signOut)
+- Test component react to events
 
-## Available Scripts
+# What not to test in react apps
 
-In the project directory, you can run:
+- Implementation details (test behaviour and not the implementation of the behaviour)
+- Third party code (material UI)
+- Code that is not important from a user point fo view (ex: do not test a utility funtion to render a friendly format to user, but test the final result rendered in screen or in the output of the function who calls it.)
 
-### `npm start`
+# React Testing Library - Queries
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Queries are the methods that Testing Libraryprovides to find elements on the page
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+  One element:
 
-### `npm test`
+  - getBy..
+  - queryBy..
+  - findBy..
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  Multiple elements:
 
-### `npm run build`
+  - getAllBy..
+  - queryAllBy..
+  - findAllBy..
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The suffix can be one of the role, LabelText, PlacholderText, DisplayValue, AltText, Title and TestId
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Priority Order for Queries - To find elements in virtual DOM
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+getByRole
+getByLabelText
+getByPlaceholderText
+getByText
+getByDisplayValue
+getByAltText
+getByTitle
+getByTestId
 
-### `npm run eject`
+## getAllBy - Multiple elements query
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+getAllByRole
+getAllByLabelText
+getAllByPlaceholderText
+getAllByText
+getAllByDisplayValue
+getAllByAltText
+getAllByTitle
+getAllByTestId
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## TEXT MATCH
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- String
+- Regex
+- Function
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Examples:
 
-## Learn More
+  <div>Hello world</div>
+  screen.getByText("Hello world") => Full string match
+  screen.getByText("llo wor") => Substring match
+  screen.getByText("hello world") => Ignore case
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Function match
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+(content?: string, element?: Element | null) => boolean
+screen.getByText((content) => content.startsWith("Hello"))
+
+## QueryBy
+
+- Return the matching node or null if doesn't find any element match.
+- Useful for asserting an element that is not present in render
+- Throws an error if more than one match is found
+
+## Appearance / Disappearance
+
+- Example: Data fetched from server.
+- Use FindBy
+- Returns a promise
+
+# DEBBUGING TESTS
+
+screen.debug() --> To visualize the DOM tree in console.
+
+logRoles(view.container) --> To separate elements in containers (Showing their names and tags) and display them in console.
+
+# TESTING PLAYGROUND
+
+Chrome extension --> To inspect elements from my screens in browser and test them.
+
+# USER INTERACTIONS
+
+- A click using a mouse or a keypress using a keyboard.
+
+FireEvent | User-event
+
+- FireEvent is used to dispatch DOM events
+- User-event simulates full interactions, which may fire multiples events and do additional checks along the way.
+
+# TEST PROVIDERS
+
+```
+render( <MuiMode />, {
+  wrapper: AppProviders
+})
+```
+
+# CUSTOM RENDER FUNCTION
+
+- Create a file named test-utils to group every providers to use in the tests
+- Examples on MuiMode component
+
+# CUSTOM REACT HOOKS
+
+- import **renderHook** (instead only render)
+
+# MOCKING HTTP REQUESTS
+
+- Only E2E test will use real http requests data. For unit tests we use mocking data.
+
+# STATIC ANALYSIS TESTING
+
+- Ensure consistent style and formatting
+- Check for commom mistakes and pssible bugs
+- Limit the complexity of code
+- Verify type consistency
+
+## Static testing tools
+
+- Typescript
+- ESlint
+- Prettier
+- Husky (Is a tool that helps to improve commits and more)
+- lint-staged (Run linters and formatters) against staged git files
